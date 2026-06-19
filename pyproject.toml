@@ -1,0 +1,10 @@
+[project]
+name = "google-flights-mcp"
+version = "1.0.0"
+description = "MCP server for Google Flights search via fast-flights v3"
+requires-python = ">=3.10"
+dependencies = [
+    "fast-flights>=3.0",
+    "mcp[cli]>=1.0.0",
+    "airportsdata>=20240101",
+]
