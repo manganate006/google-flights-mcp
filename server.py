@@ -462,16 +462,29 @@ def search_multi_city(
     language: str = "fr",
 ) -> str:
     """
-    Search multi-city flights on Google Flights.
+    Search a multi-city itinerary (legs on different dates) on Google Flights,
+    priced as one combined trip.
+
+    When to use: pick this over search_flights when the journey is NOT a simple
+    one-way or round-trip — e.g. NCE->BCN on Aug 1, then BCN->LIS on Aug 8. For
+    one-way/round-trip use search_flights; to compare prices across several
+    destinations use compare_destinations.
+
+    All airports must be IATA codes; if you only know a city name, call
+    find_airport first. Legs are flown in the order given (chronological). Read
+    only, no booking. Returns at most 20 flights sorted by price; Google Flights
+    may throttle rapid successive calls.
 
     Args:
-        legs: JSON array of legs, e.g. [{"from":"NCE","to":"BCN","date":"2026-08-01"},{"from":"BCN","to":"LIS","date":"2026-08-08"}]
-        adults: Number of adults
-        children: Number of children
-        seat: Seat class
-        max_stops: Max stops per leg: -1 = no limit (default), 0 = direct only
-        currency: ISO currency code (default EUR)
-        language: Language code (default fr)
+        legs: JSON array of legs in order; each item is an object with "from"
+            (IATA departure), "to" (IATA destination) and "date" (YYYY-MM-DD).
+            Example: [{"from":"NCE","to":"BCN","date":"2026-08-01"},{"from":"BCN","to":"LIS","date":"2026-08-08"}]
+        adults: Number of adult passengers, age 12+ (default 2)
+        children: Number of child passengers, ages 2-11 (default 2)
+        seat: Cabin class: one of economy, premium-economy, business, first (default economy)
+        max_stops: Max stops per leg: -1 = no limit (default), 0 = direct only, 1 = at most one stop
+        currency: ISO 4217 currency code for the returned prices (default EUR)
+        language: ISO 639-1 language code for the results (default fr)
     """
     from fast_flights import FlightQuery, Passengers, create_query
 
